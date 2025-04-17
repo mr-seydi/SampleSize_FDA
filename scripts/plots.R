@@ -10,7 +10,7 @@ library(dplyr)
 #####Angle data############
 
 # Load necessary libraries
-Output_vGRF <- read_excel("vGRF_equal_1_small.xlsx")
+Output_vGRF <- read_excel("/Users/more0056/Downloads/VGRF_equal_1_small.xlsx")
 results_vGRF <- SS_finder(Output_vGRF)
 
 # Create heatmaps for each column
@@ -32,7 +32,7 @@ print(heatmap_ERL_vGRF)
 print(heatmap_IATSE_vGRF)
 ##################################
 ##############MF data#############
-Output_KJM <- read_excel("KJM_equal_1.xlsx")
+Output_KJM <- read_excel("/Users/more0056/Downloads/KJM_equal_1.xlsx")
 results_KJM <- SS_finder(Output_KJM)
 
 # Create heatmaps for each column
@@ -205,7 +205,7 @@ final_plot_with_legend <- grid.arrange(
 grid.newpage()
 grid.draw(final_plot_with_legend)
 #save plot
-ggsave("Outputs/plot_final.jpeg", final_plot_with_legend, width = 190, height = 196, units = "mm", dpi = 1200)
+#ggsave("Outputs/plot_final.jpeg", final_plot_with_legend, width = 190, height = 196, units = "mm", dpi = 1200)
 
 
 #####################################
@@ -232,7 +232,7 @@ plot2 <- Data_plot(Moment_data("both")[, c(2, 1)],TITLE = "KJM") +
 #plot plot1 and 2 in a same row
 data_plot <- grid.arrange(plot1, plot2, ncol=2)
 
-ggsave("Outputs/plot_data.jpeg", data_plot, width = 190, height = 120, units = "mm", dpi = 1200)
+#ggsave("Outputs/plot_data.jpeg", data_plot, width = 190, height = 120, units = "mm", dpi = 1200)
 
 
 
@@ -437,4 +437,207 @@ final_plot_with_legend <- grid.arrange(
 grid.newpage()
 grid.draw(final_plot_with_legend)
 #save plot
-ggsave("Outputs/plot_final_FWER.jpeg", final_plot_with_legend, width = 190, height = 196, units = "mm", dpi = 1200)
+#ggsave("Outputs/plot_final_FWER.jpeg", final_plot_with_legend, width = 190, height = 196, units = "mm", dpi = 1200)
+
+
+
+
+
+
+
+
+########Plot sample data##########
+library(readxl)
+library(ggplot2)
+library(gridExtra)
+library(grid)
+library(dplyr)
+source("R/plot_functions.R")
+source("R/utilities.R")
+source("R/Data_functions.R")
+set.seed(123)
+Noise_data_1_vGRF <- noise_guassian_curve(number_of_curves=10, continuum_size=101)
+NFWHM_10_1_vGRF <- smoothed_gussian_curves(data=Noise_data_1_vGRF, mu=0, sig=0.4, fwhm=10)
+NFWHM_30_1_vGRF <- smoothed_gussian_curves(data=Noise_data_1_vGRF, mu=0, sig=0.5, fwhm=30)
+NFWHM_50_1_vGRF <- smoothed_gussian_curves(data=Noise_data_1_vGRF, mu=0, sig=0.6, fwhm=50)
+
+Noise_data_2_vGRF <- noise_guassian_curve(number_of_curves=10, continuum_size=101)
+NFWHM_10_2_vGRF <- smoothed_gussian_curves(data=Noise_data_2_vGRF, mu=0, sig=0.4, fwhm=10)
+NFWHM_30_2_vGRF <- smoothed_gussian_curves(data=Noise_data_2_vGRF, mu=0, sig=0.5, fwhm=30)
+NFWHM_50_2_vGRF <- smoothed_gussian_curves(data=Noise_data_2_vGRF, mu=0, sig=0.6, fwhm=50)
+
+NFWHM_10_curve_vGRF <- Noise_plot(NFWHM_10_1_vGRF) + ylim(-1.5, 1.5) +
+  theme(legend.position = "none", axis.title.x=element_blank(),
+        axis.text.x=element_blank(), axis.title.y=element_blank(),
+        axis.ticks.x=element_blank(), axis.ticks.y = element_blank()) + labs(title = NULL)
+NFWHM_30_curve_vGRF <- Noise_plot(NFWHM_30_1_vGRF) + ylim(-1.5, 1.5) +
+  theme(legend.position = "none", axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(), axis.ticks.y = element_blank()) + labs(title = NULL)
+NFWHM_50_curve_vGRF <- Noise_plot(NFWHM_50_1_vGRF) + ylim(-1.5, 1.5) +
+  theme(legend.position = "none",
+        axis.title.y=element_blank(),
+        axis.ticks.y = element_blank()) + labs(title = NULL)
+
+
+
+plot1_vGRF <- sample_plot(data_type = "two-sample", Org_data = vGRF_data_Phan("both"),
+                       Signal_curve = NULL, noise1_data = NFWHM_10_1_vGRF,
+                       noise2_data = NFWHM_10_2_vGRF,Title = "", legend = "none") + ylim(-1, 4) +
+  theme(legend.position = "none", axis.title.x=element_blank(),
+  axis.text.x=element_blank(), axis.title.y=element_blank(),
+  axis.ticks.x=element_blank(), axis.ticks.y = element_blank()) + labs(title = NULL)
+plot2_vGRF <- sample_plot(data_type = "two-sample", Org_data = vGRF_data_Phan("both"),
+                        Signal_curve = NULL, noise1_data = NFWHM_30_1_vGRF,
+                        noise2_data = NFWHM_30_2_vGRF,Title = "", legend = "none") + ylim(-1, 4)+
+  theme(legend.position = "none", axis.title.x=element_blank(),
+        axis.text.x=element_blank(), axis.title.y=element_blank(),
+        axis.ticks.x=element_blank(), axis.ticks.y = element_blank()) + labs(title = NULL)
+plot3_vGRF <- sample_plot(data_type = "two-sample", Org_data = vGRF_data_Phan("both"),
+                       Signal_curve = NULL, noise1_data = NFWHM_50_1_vGRF,
+                       noise2_data = NFWHM_50_2_vGRF,Title = "", legend = "none") + ylim(-1, 4) +
+  theme(legend.position = "none",
+       axis.title.y=element_blank(),
+       axis.ticks.y = element_blank()) + labs(title = NULL)
+
+
+Noise_data_1_KJM <- noise_guassian_curve(number_of_curves=10, continuum_size=101)
+NFWHM_10_1_KJM <- smoothed_gussian_curves(data=Noise_data_1_KJM, mu=0, sig=0.8, fwhm=10)
+NFWHM_30_1_KJM <- smoothed_gussian_curves(data=Noise_data_1_KJM, mu=0, sig=1, fwhm=30)
+NFWHM_50_1_KJM <- smoothed_gussian_curves(data=Noise_data_1_KJM, mu=0, sig=1.2, fwhm=50)
+
+Noise_data_2_KJM <- noise_guassian_curve(number_of_curves=10, continuum_size=101)
+NFWHM_10_2_KJM <- smoothed_gussian_curves(data=Noise_data_2_KJM, mu=0, sig=0.8, fwhm=10)
+NFWHM_30_2_KJM <- smoothed_gussian_curves(data=Noise_data_2_KJM, mu=0, sig=1, fwhm=30)
+NFWHM_50_2_KJM <- smoothed_gussian_curves(data=Noise_data_2_KJM, mu=0, sig=1.2, fwhm=50)
+
+NFWHM_10_curve_KJM <- Noise_plot(NFWHM_10_1_KJM) + ylim(-2.5, 3) + 
+  theme(legend.position = "none", axis.title.x=element_blank(),
+        axis.text.x=element_blank(), axis.title.y=element_blank(),
+        axis.ticks.x=element_blank(), axis.ticks.y = element_blank()) + labs(title = NULL)
+NFWHM_30_curve_KJM <- Noise_plot(NFWHM_30_1_KJM) + ylim(-2.5, 3) +
+  theme(legend.position = "none", axis.title.x=element_blank(),
+        axis.text.x=element_blank(), axis.title.y=element_blank(),
+        axis.ticks.x=element_blank(), axis.ticks.y = element_blank()) + labs(title = NULL)
+NFWHM_50_curve_KJM <- Noise_plot(NFWHM_50_1_KJM) + ylim(-2.5, 3) +
+  theme(legend.position = "none",
+        axis.title.y=element_blank(),
+        axis.ticks.y = element_blank()) + labs(title = NULL)
+
+plot1_KJM <- sample_plot(data_type = "two-sample", Org_data = Moment_data("both")[, c(2, 1)],
+                Signal_curve = NULL, noise1_data = NFWHM_10_1_KJM,
+                noise2_data = NFWHM_10_2_KJM,Title = "", legend = "none") + ylim(-3, 3.5) +
+  theme(legend.position = "none", axis.title.x=element_blank(),
+        axis.text.x=element_blank(), axis.title.y=element_blank(),
+        axis.ticks.x=element_blank(), axis.ticks.y = element_blank()) + labs(title = NULL)
+plot2_KJM <- sample_plot(data_type = "two-sample", Org_data = Moment_data("both")[, c(2, 1)],
+                Signal_curve = NULL, noise1_data = NFWHM_30_1_KJM,
+                noise2_data = NFWHM_30_2_KJM,Title = "", legend = "none") + ylim(-3, 3.5) +
+  theme(legend.position = "none", axis.title.x=element_blank(),
+        axis.text.x=element_blank(), axis.title.y=element_blank(),
+        axis.ticks.x=element_blank(), axis.ticks.y = element_blank()) + labs(title = NULL)
+plot3_KJM <- sample_plot(data_type = "two-sample", Org_data = Moment_data("both")[, c(2, 1)],
+                Signal_curve = NULL, noise1_data = NFWHM_50_1_KJM,
+                noise2_data = NFWHM_50_2_KJM,Title = "", legend = "none") + ylim(-3, 3.5) +
+  theme(legend.position = "none",
+        axis.title.y=element_blank(),
+        axis.ticks.y = element_blank()) + labs(title = NULL)
+
+
+
+####################
+library(gridExtra)
+# #install.packages("cowplot")
+# library(cowplot)
+library(grid)
+
+
+
+# Create a legend using one of the plots
+legend_plot <- sample_plot(data_type = "two-sample", Org_data = vGRF_data_Phan("both"),
+                           Signal_curve = NULL, noise1_data = NFWHM_10_1_vGRF,
+                           noise2_data = NFWHM_10_2_vGRF,Title = "", legend = "bottom") + ylim(-1, 4)
+# Convert the plot to a grob object
+grob_legend <- ggplotGrob(legend_plot)
+
+# Extract legend component from the gtable
+legend_index <- which(sapply(grob_legend$grobs, function(x) x$name) == "guide-box")
+shared_legend <- grob_legend$grobs[[legend_index]]
+
+#######new#####
+# -------------------------------------------------------
+# CONVERT YOUR PLOTS TO GROBS
+# -------------------------------------------------------
+# Your list of plots (make sure these objects are created from your earlier code)
+plots <- list(
+  NFWHM_10_curve_vGRF, plot1_vGRF, NFWHM_10_curve_KJM, plot1_KJM,
+  NFWHM_30_curve_vGRF, plot2_vGRF, NFWHM_30_curve_KJM, plot2_KJM,
+  NFWHM_50_curve_vGRF, plot3_vGRF, NFWHM_50_curve_KJM, plot3_KJM
+)
+
+# Convert each ggplot object into a grob
+grob_list <- lapply(plots, ggplotGrob)
+
+# -------------------------------------------------------
+# UNIFY WIDTHS & HEIGHTS ACROSS ALL PLOTS
+# -------------------------------------------------------
+# Unify the widths: find the maximum widths across all grobs and set each grob's widths to that value.
+maxWidth <- do.call(unit.pmax, lapply(grob_list, function(g) g$widths))
+for (i in seq_along(grob_list)) {
+  grob_list[[i]]$widths <- maxWidth
+}
+
+# Unify the heights: find the maximum heights across all grobs and set each grob's heights to that value.
+maxHeight <- do.call(unit.pmax, lapply(grob_list, function(g) g$heights))
+for (i in seq_along(grob_list)) {
+  grob_list[[i]]$heights <- maxHeight
+}
+
+# -------------------------------------------------------
+# ARRANGE THE PLOTS IN A GRID
+# -------------------------------------------------------
+# Here we arrange the grob_list into a grid.
+# You can change ncol to arrange them into the layout you desire.
+grid_plots <- arrangeGrob(grobs = grob_list, ncol = 4)
+
+# (Optional) If you want to add row and column labels, you can follow an approach similar to your first block.
+# For example, create the labels:
+column_labels <- arrangeGrob(
+  textGrob("Noise", gp = gpar(fontsize = 10, fontface = "bold"), hjust = -1.1),
+  textGrob("vGRF Sample Curves", gp = gpar(fontsize = 10, fontface = "bold"), hjust = 0.2),
+  textGrob("Noise", gp = gpar(fontsize = 10, fontface = "bold"), hjust = -0.1),
+  textGrob("KJM Sample Curves", gp = gpar(fontsize = 10, fontface = "bold"), hjust = 0.5),
+  ncol = 4
+)
+
+
+row_labels <- arrangeGrob(
+  grobs = lapply(c("Noise FWHM = 10", "Noise FWHM = 30", "Noise FWHM = 50"), function(label) {
+    textGrob(label, rot = 90, gp = gpar(fontsize = 10, fontface = "bold"))
+  }),
+  nrow = 3
+)
+
+# Combine the row labels with the grid of plots.
+grid_with_labels <- arrangeGrob(
+  row_labels, grid_plots,
+  ncol = 2,
+  widths = unit.c(unit(1, "cm"), unit(0.9, "npc"))
+)
+
+# Combine everything using cowplot's plot_grid or grid.arrange.
+# Here we use cowplot for an easy layout of the grid and the legend:
+library(cowplot)
+final_plot <- plot_grid(
+  arrangeGrob(column_labels, grid_with_labels, ncol = 1, 
+              heights = unit.c(unit(1, "cm"), unit(0.9, "npc"))),
+  plot_grid(shared_legend),   # Legend at the bottom
+  ncol = 1, rel_heights = c(0.9, 0.1)
+)
+
+# Display the final plot
+grid.newpage()
+grid.draw(final_plot)
+
+#ggsave("Outputs/plot_samples.jpeg", final_plot, width = 190, height = 196, units = "mm", dpi = 1200)
+

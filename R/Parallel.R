@@ -12,7 +12,7 @@ Power_parallel <- function(data, sample_size,
     data = deparse(substitute(data)),         # Store the name of 'data' as a string
     sample_size = sample_size,                # Numeric value
     noise_mean = noise_mean,                  # Numeric value
-    noise_sd = noise_sd,                      # Numeric value
+    noise_sd = max(noise_sd),                      # Numeric value
     noise_fwhm = noise_fwhm,                  # Numeric value
     signal = ifelse(is.null(signal),"NULL",signal),        # Numeric value
     method = paste(method, collapse = ", "),  # Store 'method' as a string of methods
