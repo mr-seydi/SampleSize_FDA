@@ -38,9 +38,7 @@ for (noise_sd in list(sd1,sd2,sd3)) {
     methods_to_run <- methods # Start with all methods
     
     # Continue increasing sample size until all methods reach target power or sample_size > max_sample_size
-    while (sample_size <= max_sample_size 
-           #&& length(methods_to_run) > 0
-    ) {
+    while (sample_size <= max_sample_size && length(methods_to_run) > 0) {
       
       # Run the Power_parallel function with the current sample size
       power_results <- Power_parallel(
@@ -61,9 +59,9 @@ for (noise_sd in list(sd1,sd2,sd3)) {
       results_list[[paste("Noise_SD", max(noise_sd), "Noise_FWHM", noise_fwhm, "Sample_Size", sample_size, sep = "_")]] <- power_results$Input_Summary
       
       # Check which methods have achieved the target power
-      # methods_to_run <- methods_to_run[sapply(methods_to_run, function(method_name) {
-      #   power_result_summary[[method_name]] < target_power
-      # })]
+      methods_to_run <- methods_to_run[sapply(methods_to_run, function(method_name) {
+        power_result_summary[[method_name]] < target_power
+      })]
       
       # Increment sample size for next iteration
       sample_size <- sample_size + 1
